@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>异步函数API测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>异步函数API测试页面</h1>
+    
+    <div class="container">
+        <h2>1. 测试根路径</h2>
+        <button onclick="testRoot()">测试 /</button>
+        <div id="rootResult" class="result"></div>
+    </div>
+
+    <div class="container">
+        <h2>2. 测试异步函数调用</h2>
+        <button onclick="testHello()">测试 /hello</button>
+        <div id="helloResult" class="result"></div>
+    </div>
+
+    <div class="container">
+        <h2>3. 测试多次调用</h2>
+        <input type="number" id="countInput" value="3" min="1" max="10" placeholder="调用次数">
+        <button onclick="testMultiple()">测试 /hello-multiple</button>
+        <div id="multipleResult" class="result"></div>
+    </div>
+
+    <script>
+        async function testRoot() {
+            try {
+                const response = await fetch('http://localhost:8000/');
+                const data = await response.json();
+                document.getElementById('rootResult').textContent = data.message;
+            } catch (error) {
+                document.getElementById('rootResult').textContent = '错误: ' + error.message;
+            }
+        }
+
+        async function testHello() {
+            try {
+                const response = await fetch('http://localhost:8000/hello');
+                const data = await response.json();
+                document.getElementById('helloResult').textContent = data.message;
+            } catch (error) {
+                document.getElementById('helloResult').textContent = '错误: ' + error.message;
+            }
+        }
+
+        async function testMultiple() {
+            try {
+                const count = document.getElementById('countInput').value;
+                const response = await fetch(`http://localhost:8000/hello-multiple/${count}`);
+                const data = await response.json();
+                document.getElementById('multipleResult').textContent = data.message;
+            } catch (error) {
+                document.getElementById('multipleResult').textContent = '错误: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html> 
